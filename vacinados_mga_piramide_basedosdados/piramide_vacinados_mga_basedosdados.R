@@ -21,7 +21,7 @@ tabela_mga$sexo_paciente <- as.factor(tabela_mga$sexo_paciente)
 tabela_mga$dose_vacina <- as.factor(tabela_mga$dose_vacina)
 
 tabela_mga2 <- tabela_mga %>% 
-  mutate(dose_vacina = ifelse(str_detect(dose_vacina, "1"), 1, 2)) %>% 
+  mutate(dose_vacina = ifelse(str_detect(dose_vacina, "1"), 1, 2)) %>% #3a dose vai quebrar esse código
   filter(sexo_paciente != "I")
 
 piramide_vacinados <- tabela_mga2 %>% 
