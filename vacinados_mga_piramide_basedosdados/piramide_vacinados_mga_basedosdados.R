@@ -7,12 +7,12 @@ library("extrafont")
 # base dos dados ----------------------------------------------------------
 
 tabela_mga <- bdplyr("basedosdados.br_ms_vacinacao_covid19.microdados") %>%
+  filter(sigla_uf == "PR") %>% 
+  filter(id_municipio_estabelecimento == "4115200") %>% 
   select(data_aplicacao_vacina,
          idade_paciente,
          sexo_paciente,
          dose_vacina) %>%  
-  filter(sigla_uf == "PR",
-         id_municipio_estabelecimento == "4115200") %>% 
   bd_collect()
 
 # data wrangling ----------------------------------------------------------
@@ -52,7 +52,10 @@ piramide_vacinados$n <- as.numeric(piramide_vacinados$n)
 
 piramide_vacinados_tibble <- as_tibble(piramide_vacinados)
 
-piramide_vacinados_n$grupo_idade <- factor(piramide_vacinados_tibble$grupo_idade,
+piramide_vacinados_tibble <- piramide_vacinados_tibble %>% 
+  mutate(n_piramide = ifelse(sexo_paciente == "M", n*(-1), n))
+
+piramide_vacinados_tibble$grupo_idade <- factor(piramide_vacinados_tibble$grupo_idade,
                                          levels = c( "0_4",
                                                      "5_9",
                                                      "10_14",
@@ -71,7 +74,7 @@ piramide_vacinados_n$grupo_idade <- factor(piramide_vacinados_tibble$grupo_idade
                                                      "75_79",
                                                      "80+"))
 
-piramide_vacinados_final <- piramide_vacinados_n %>% 
+piramide_vacinados_final <- piramide_vacinados_tibble %>% 
   rename(faixa_etaria = grupo_idade,
          sexo = sexo_paciente)
 
@@ -302,9 +305,3 @@ ggplot(piramide_vacinados_pop, aes(x = factor(faixa_etaria, level = level_order)
     axis.title = element_text(size = 12, face = "bold"),
     text = element_text(family = "Open Sans")
   )
-
-
-# save --------------------------------------------------------------------
-
-
-ggsave("piramide_vacinados_mga_2021-09-14.png", width = 12, height = 9)
