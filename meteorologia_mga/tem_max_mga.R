@@ -1,7 +1,6 @@
 library(basedosdados)
 library(tidyverse)
 library(lubridate)
-library(paletteer)
 library(extrafont)
 library(cowplot)
 library(RColorBrewer)
