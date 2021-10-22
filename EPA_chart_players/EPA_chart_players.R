@@ -8,6 +8,8 @@ library(nflreadr)
 library(nflplotR)
 library(ggrepel)
 
+# load data -------------------------------------------------------------
+
 future::plan("multisession")
 #pbp <- load_pbp(seasons = 2000:2021) #tom brady
 #pbp <- load_pbp(seasons = 2004:2021) #big ben
@@ -17,6 +19,8 @@ pbp <- load_pbp(seasons = 2017:2021) #mahomes
 pbp_clean <- clean_pbp(pbp)
 
 rosters <- load_rosters(2019:2021) #can be just 2021, but if the player hasn't played yet, load some year he played
+
+# working in data -------------------------------------------------------------
 
 QB_EPA <- pbp_clean %>%
   filter(!is.na(epa),
@@ -42,18 +46,15 @@ last_game <- QB_EPA %>%
 
 this_season <- QB_EPA %>% 
   filter(season == 2021) %>% 
-  mutate(dif = abs(mean_epa-last(QB_EPA$mean_epa)))
+  mutate(dif = abs(mean_epa-last(QB_EPA$mean_epa))) #find which game has the greater difference in epa/play, just for labelling it better
   
 dif_game <- this_season %>%
   dplyr::filter(dif %in% max(this_season$dif))
 
 set.seed(2000)
-QB_EPA$jit <- runif(nrow(QB_EPA), -0.1, 0.1)
+QB_EPA$jit <- runif(nrow(QB_EPA), -0.1, 0.1) #create jitter effect because it's terrible working with it.
 
-
-# single_plot -------------------------------------------------------------
-
-
+# plot -------------------------------------------------------------
 
 ggplot(QB_EPA, aes(x=name, y=mean_epa))+
   #dist
