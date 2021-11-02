@@ -14,7 +14,7 @@ pbp <- load_pbp(seasons = 2009:2021) #stafford games
 rosters <- load_rosters(2021)
 
 QB_EPA <- pbp %>%
-  filter(!is.na(epa),
+  filter(!is.na(qb_epa),
          passer_id ==  "00-0026498",
          rush == 1 | pass == 1,
          down <= 4
@@ -24,8 +24,8 @@ QB_EPA <- pbp %>%
   filter(rows >= 5) %>% 
   ungroup() %>% 
   group_by(game_id, name, passer_id, posteam, defteam, season, week) %>% 
-  summarize(tot_epa = sum(epa),
-            mean_epa = mean(epa)) %>% 
+  summarize(tot_epa = sum(qb_epa),
+            mean_epa = mean(qb_epa)) %>% 
   left_join(teams_colors_logos, by = c("posteam" = "team_abbr")) %>% 
   left_join(rosters, by = c("passer_id" = "gsis_id",
                             "season" = "season"))
