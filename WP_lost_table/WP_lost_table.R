@@ -26,7 +26,7 @@ pbp_wp <- pbp %>%
   mutate(vegas_home_wp = ifelse(result > 0, 1-vegas_home_wp, vegas_home_wp)) %>% 
   select(game_id,home_team, posteam, result, vegas_home_wp) %>% 
   group_by(game_id) %>% 
-  dplyr::summarize(wp_data = list(vegas_home_wp), .groups = "drop")
+  summarize(wp_data = list(vegas_home_wp), .groups = "drop")
 
 table1 <- pbp_table %>% 
   left_join(pbp_wp) %>% 
