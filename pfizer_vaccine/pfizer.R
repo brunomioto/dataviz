@@ -74,7 +74,7 @@ data %>%
     title = "COVID-19 incidence rates in Pfizer/BioNTech's vaccine trial",
     x = "Days after first dose",
     y = "Cumulative incidence (%)",
-    caption = "Chart: Bruno Mioto @BrunoHMiotp - Source: New England Journal of Medicine"
+    caption = "Chart: Bruno Mioto @BrunoHMioto - Source: New England Journal of Medicine"
   )+
   theme_minimal()+
   theme(
