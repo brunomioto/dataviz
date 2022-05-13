@@ -6,7 +6,6 @@ library(janitor)
 library(tidyr)
 library(ggplot2)
 library(ggrepel)
-library(ggalt)
 
 # data --------------------------------------------------------------------
 
@@ -22,7 +21,6 @@ data_desemprego2 <- data_desemprego %>%
   select(valor, trimestre_codigo) %>%
   add_row(valor = 11.1, trimestre_codigo = "202201") %>%
   rename(valor_emprego = valor)
-
 
 data_ipca2 <- data_ipca %>%
   clean_names() %>%
@@ -50,41 +48,13 @@ data_ipca2 <- data_ipca %>%
 data_combinado <- data_desemprego2 %>%
   left_join(data_ipca2)
 
-
-
-
-# new ---------------------------------------------------------------------
-
-fun_teste <- function(data,x = x,y = y , presidente){
-  data2 <- data %>%
-    mutate(n = row_number())
-
-  data3 <- data2 %>%
-    group_by(presidente) %>%
-    slice(1)
-
-  data4 <- data2 %>%
-    bind_rows(data3) %>%
-    arrange(n) %>%
-    mutate(lag_b = lag(presidente))
-
-  return(data4)
-}
-
-
-
-data_combinado2 <- fun_teste(data_combinado, valor_emprego, valor_ipca, presidente)
-
 # plot --------------------------------------------------------------------
 
-
-data_combinado2 %>%
-  slice(-1) %>%
+data_combinado %>%
   mutate(trimestre_codigo = as.numeric(trimestre_codigo)) %>%
   arrange(trimestre_codigo) %>%
   ggplot(aes(x = valor_emprego, y = valor_ipca, color = lag_b))+
-  #geom_path(size = 1.5)+
-  stat_xspline(geom="path",spline_shape=-0.5, size = 1.5)+
+  geom_path(size = 1.5)+
   annotate("curve", x = 8.4, xend = 7.5, y = 8.89, yend = 9,
            arrow = arrow(length = unit(5, "pt")),curvature = 0.3,
            color = "grey40")+
@@ -95,10 +65,7 @@ data_combinado2 %>%
                  size = 2, fill = "white")+
   geom_point(aes(shape = ifelse(tri != 1, NA, 16)),
              size = 2, color = "#010101")+
-  geom_text_repel(data = data_combinado2 %>%
-                    select(-lag_b) %>%
-                    distinct(),
-                  aes(label = ifelse(tri == 1,
+  geom_text_repel(aes(label = ifelse(tri == 1,
                                      paste0(tri, "º tri\n", ano),
                                      "")),
                   force_pull = 0,
@@ -169,10 +136,4 @@ data_combinado2 %>%
   coord_fixed(ylim = c(2,11.5), xlim = c(6,15))
 
 
-
-ggsave("plot_new3.png", width = 6.5, height = 7)
-
-
-
-
-
+ggsave("plot.png", width = 6.5, height = 7)
