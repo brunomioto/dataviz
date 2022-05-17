@@ -5,14 +5,12 @@ library(ggplot2)
 library(ggforce)
 library(ggnewscale)
 
-
 # data --------------------------------------------------------------------
 
-test <- data.frame(x = runif(1000),
+data <- data.frame(x = runif(1000),
                    y = runif(1000))
 
-
-circles <- data.frame(
+circle <- data.frame(
   x0 = 0.1,
   y0 = 0.9,
   r = 0.06
@@ -20,7 +18,7 @@ circles <- data.frame(
 
 # plot --------------------------------------------------------------------
 
-eye <- ggplot(test)+
+eye <- ggplot(data)+
   #fundo
   geom_tile(aes(x = 0.5, y=1, fill = y)) +
   scale_fill_gradient2(low = '#ffffff', mid = "#f3f1f4", high = '#e8e4e9',
@@ -40,7 +38,7 @@ eye <- ggplot(test)+
   geom_rect(xmin = 0, xmax = 1, ymin = 0, ymax = 0.4,
             fill = "#000000")+
   #reflexo
-  geom_circle(data = circles, aes(x0 = x0, y0 = y0, r = r, fill = r),
+  geom_circle(data = circle, aes(x0 = x0, y0 = y0, r = r, fill = r),
               fill = "#ffffff")+
   scale_y_continuous(limits = c(0,1.5))+
   coord_polar()+
@@ -50,5 +48,6 @@ eye <- ggplot(test)+
     plot.background = element_rect(fill = "white", color = NA)
   )
 
+# save --------------------------------------------------------------------
 
 ggsave(plot = eye, "eye.png", width = 6, height = 6)
