@@ -9,12 +9,12 @@ library(ggchicklet)
 library(ggh4x)
 
 # data --------------------------------------------------------------------
-url <- "https://raw.githubusercontent.com/ajreinhard/NFL-public/main/misc-data/2013_to_2021_init53.csv"
+url <- "https://raw.githubusercontent.com/ajreinhard/NFL-public/main/misc-data/2013_to_2022_init53.csv"
 
 rosters <- read_csv(url)
 
 roster_2021 <- rosters %>% 
-  filter(season == 2021) %>% 
+  filter(season == 2022) %>% 
   mutate(draft_rnd = ifelse(draft_type == "Undrafted","UFA",draft_rnd))
 
 round_players <- roster_2021 %>% 
@@ -53,7 +53,7 @@ round_players %>%
                '#737373')
   )+
   labs(
-    title = "Number of players of each team by draft round in the 2021 season",
+    title = "Number of players of each team by draft round in the 2022 season",
     fill = "Draft round",
     caption = "Bruno Mioto @BrunoHMioto - Data: TheFootballDB by @reinhurdler"
   )+
@@ -66,7 +66,7 @@ round_players %>%
     plot.background = element_rect(fill = "white", color = NA),
     plot.margin = margin(15,15,15,15,unit = "pt"),
     legend.title = element_text(face = "bold"),
-    #axis.text.y = element_nfl_logo(size = 0.7),
+    axis.text.y = element_nfl_logo(size = 0.7),
     axis.title = element_blank(),
     legend.position = "top",
     legend.spacing.x = unit(0.1, 'cm'),
@@ -83,7 +83,7 @@ round_players %>%
   coord_flip()+
   NULL
 
-#ggsave("rnd_players_2021.png", width = 10, height = 6)
+#ggsave("rnd_players_2022.png", width = 10, height = 6)
 
 
 
